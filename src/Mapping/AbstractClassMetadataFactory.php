@@ -4,20 +4,24 @@ declare(strict_types=1);
 
 namespace Doctrine\Persistence\Mapping;
 
-use Doctrine\Persistence\Mapping\Driver\MappingDriver;
-use Doctrine\Persistence\Proxy;
-use Psr\Cache\CacheItemPoolInterface;
-use ReflectionClass;
-use ReflectionException;
-
 use function array_combine;
 use function array_keys;
 use function array_map;
 use function array_reverse;
 use function array_unshift;
+
 use function assert;
 use function class_exists;
+
+use Doctrine\Persistence\Mapping\Driver\MappingDriver;
+use Doctrine\Persistence\Proxy;
+
 use function ltrim;
+
+use Psr\Cache\CacheItemPoolInterface;
+use ReflectionClass;
+use ReflectionException;
+
 use function str_contains;
 use function str_replace;
 use function strrpos;
@@ -435,7 +439,7 @@ abstract class AbstractClassMetadataFactory implements ClassMetadataFactory
 
     private function createDefaultProxyClassNameResolver(): void
     {
-        $this->proxyClassNameResolver = new class implements ProxyClassNameResolver {
+        $this->proxyClassNameResolver = new class () implements ProxyClassNameResolver {
             /**
              * @phpstan-param class-string<Proxy<T>>|class-string<T> $className
              *

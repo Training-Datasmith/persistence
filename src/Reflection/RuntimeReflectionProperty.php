@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace Doctrine\Persistence\Reflection;
 
 use Doctrine\Persistence\Proxy;
-use ReflectionProperty;
 
 use function ltrim;
+
 use function method_exists;
+
+use ReflectionProperty;
 
 /**
  * PHP Runtime Reflection Property.

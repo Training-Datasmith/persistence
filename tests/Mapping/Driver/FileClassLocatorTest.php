@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Doctrine\Tests\Persistence\Mapping\Driver;
 
 use DirectoryIterator;
+
+use function dirname;
+
 use Doctrine\Persistence\Mapping\Driver\FileClassLocator;
 use Doctrine\Persistence\Mapping\MappingException;
 use Doctrine\Tests\Persistence\Mapping\_files\colocated\Entity;
@@ -12,17 +15,20 @@ use Doctrine\Tests\Persistence\Mapping\_files\colocated\EntityFixture;
 use Doctrine\Tests\Persistence\Mapping\_files\colocated\Foo;
 use Doctrine\Tests\Persistence\Mapping\_files\colocated\TestClass;
 use EmptyIterator;
+
+use function ini_get;
+
 use Phar;
 use PHPUnit\Framework\TestCase;
+
+use function sort;
+
+use const SORT_STRING;
+
 use SplFileInfo;
 use Symfony\Component\Finder\Finder;
 
-use function dirname;
-use function ini_get;
-use function sort;
 use function unlink;
-
-use const SORT_STRING;
 
 final class FileClassLocatorTest extends TestCase
 {

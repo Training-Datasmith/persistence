@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Doctrine\Persistence\Mapping;
 
-use Doctrine\Persistence\Reflection\RuntimeReflectionProperty;
-use Doctrine\Persistence\Reflection\TypedNoDefaultReflectionProperty;
-use ReflectionClass;
-use ReflectionException;
-use ReflectionMethod;
-
 use function array_key_exists;
 use function assert;
 use function class_exists;
 use function class_parents;
+
+use Doctrine\Persistence\Reflection\RuntimeReflectionProperty;
+
+use Doctrine\Persistence\Reflection\TypedNoDefaultReflectionProperty;
+use ReflectionClass;
+use ReflectionException;
+use ReflectionMethod;
 
 /**
  * PHP Runtime Reflection Service.

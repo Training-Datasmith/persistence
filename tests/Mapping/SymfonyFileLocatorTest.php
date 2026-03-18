@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Doctrine\Tests\Persistence\Mapping;
 
+use const DIRECTORY_SEPARATOR;
+
 use Doctrine\Persistence\Mapping\Driver\SymfonyFileLocator;
 use Doctrine\Persistence\Mapping\MappingException;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\DataProvider;
+
 use PHPUnit\Framework\TestCase;
 
 use function realpath;
-use function sort;
 
-use const DIRECTORY_SEPARATOR;
+use function sort;
 
 class SymfonyFileLocatorTest extends TestCase
 {
@@ -199,7 +201,7 @@ class SymfonyFileLocatorTest extends TestCase
 
         self::assertSame(
             __DIR__ . '/_match_ns/Bar/barEntity.yml',
-            $locator->findMappingFile("Foo\\Bar\\barEntity"),
+            $locator->findMappingFile('Foo\\Bar\\barEntity'),
         );
     }
 
@@ -213,7 +215,7 @@ class SymfonyFileLocatorTest extends TestCase
 
         self::assertSame(
             __DIR__ . '/_match_ns/Bar/barEntity.yml',
-            $locator->findMappingFile("Foo\\Bar\\barEntity"),
+            $locator->findMappingFile('Foo\\Bar\\barEntity'),
         );
     }
 }

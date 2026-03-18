@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace Doctrine\Tests\Persistence\Reflection;
 
+use function assert;
+
 use Attribute;
 use Doctrine\Persistence\Reflection\EnumReflectionProperty;
 use PHPUnit\Framework\TestCase;
 use ReflectionNamedType;
 use ReflectionProperty;
-use ValueError;
 
-use function assert;
+use ValueError;
 
 class EnumReflectionPropertyTest extends TestCase
 {

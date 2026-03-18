@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace Doctrine\Persistence\Reflection;
 
+use function array_map;
+
 use BackedEnum;
+
+use function is_array;
+
 use ReflectionProperty;
 
-use function array_map;
-use function is_array;
 use function reset;
 
 /**

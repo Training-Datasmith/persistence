@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Doctrine\Tests\Persistence;
 
+use function assert;
+use function call_user_func;
+
 use Closure;
 use Doctrine\Persistence\AbstractManagerRegistry;
 use Doctrine\Persistence\Mapping\ClassMetadata;
@@ -13,11 +16,9 @@ use Doctrine\Persistence\ObjectRepository;
 use Doctrine\Persistence\Proxy;
 use Doctrine\Tests\Persistence\Mapping\TestClassMetadataFactory;
 use PHPUnit\Framework\Attributes\Group;
+
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-
-use function assert;
-use function call_user_func;
 
 #[Group('DCOM-270')]
 class ManagerRegistryTest extends TestCase
@@ -60,7 +61,7 @@ class ManagerRegistryTest extends TestCase
 
     public function testGetManagerForAnonymousClass(): void
     {
-        self::assertNull($this->mr->getManagerForClass((new class {
+        self::assertNull($this->mr->getManagerForClass((new class () {
         })::class));
     }
 

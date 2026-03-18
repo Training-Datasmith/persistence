@@ -4,27 +4,31 @@ declare(strict_types=1);
 
 namespace Doctrine\Persistence\Mapping\Driver;
 
-use Doctrine\Persistence\Mapping\MappingException;
-use InvalidArgumentException;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use RuntimeException;
-
 use function array_keys;
 use function assert;
+
+use const DIRECTORY_SEPARATOR;
+
+use Doctrine\Persistence\Mapping\MappingException;
+use InvalidArgumentException;
+
 use function is_dir;
 use function is_file;
 use function is_int;
 use function realpath;
+
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RuntimeException;
+
 use function sprintf;
 use function str_replace;
 use function str_starts_with;
 use function strlen;
 use function strrpos;
 use function strtr;
-use function substr;
 
-use const DIRECTORY_SEPARATOR;
+use function substr;
 
 /**
  * The Symfony File Locator makes a simplifying assumptions compared

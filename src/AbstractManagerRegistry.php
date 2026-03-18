@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Doctrine\Persistence;
 
+use function assert;
+
 use InvalidArgumentException;
+
 use ReflectionClass;
 
-use function assert;
 use function sprintf;
 
 /**

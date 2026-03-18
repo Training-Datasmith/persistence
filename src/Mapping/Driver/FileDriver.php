@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace Doctrine\Persistence\Mapping\Driver;
 
-use Doctrine\Persistence\Mapping\MappingException;
-
 use function array_keys;
+
 use function array_unique;
 use function array_values;
+
+use Doctrine\Persistence\Mapping\MappingException;
+
 use function is_file;
 use function str_replace;
 

@@ -4,18 +4,21 @@ declare(strict_types=1);
 
 namespace Doctrine\Persistence\Mapping\Driver;
 
+use function array_unique;
+
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use Doctrine\Persistence\Mapping\MappingException;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use ReflectionClass;
 
-use function array_unique;
 use function get_declared_classes;
 use function in_array;
+
 use function is_dir;
 use function method_exists;
 use function realpath;
+
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use ReflectionClass;
 
 /**
  * The StaticPHPDriver calls a static loadMetadata() method on your entity

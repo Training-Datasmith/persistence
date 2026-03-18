@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace Doctrine\Tests\Persistence\Mapping;
 
+use function count;
+
 use Doctrine\Persistence\Mapping\MappingException;
 use Doctrine\Persistence\Mapping\RuntimeReflectionService;
 use Doctrine\Persistence\Reflection\RuntimeReflectionProperty;
 use Doctrine\Persistence\Reflection\TypedNoDefaultReflectionProperty;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use ReflectionProperty;
 
-use function count;
+use ReflectionProperty;
 
 #[Group('DCOM-93')]
 class RuntimeReflectionServiceTest extends TestCase

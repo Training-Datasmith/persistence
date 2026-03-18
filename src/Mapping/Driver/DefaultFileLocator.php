@@ -4,18 +4,21 @@ declare(strict_types=1);
 
 namespace Doctrine\Persistence\Mapping\Driver;
 
-use Doctrine\Persistence\Mapping\MappingException;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-
 use function array_unique;
 use function assert;
+
+use const DIRECTORY_SEPARATOR;
+
+use Doctrine\Persistence\Mapping\MappingException;
+
 use function is_dir;
 use function is_file;
 use function is_string;
-use function str_replace;
 
-use const DIRECTORY_SEPARATOR;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+
+use function str_replace;
 
 /**
  * Locates the file that contains the metadata information for a given class name.

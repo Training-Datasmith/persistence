@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace Doctrine\Tests\Persistence\Mapping;
 
+use const DIRECTORY_SEPARATOR;
+
 use Doctrine\Persistence\Mapping\Driver\DefaultFileLocator;
 use Doctrine\Persistence\Mapping\MappingException;
+
 use PHPUnit\Framework\TestCase;
 
 use function sort;
-
-use const DIRECTORY_SEPARATOR;
 
 class DefaultFileLocatorTest extends TestCase
 {

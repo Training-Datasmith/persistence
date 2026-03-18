@@ -5,25 +5,33 @@ declare(strict_types=1);
 namespace Doctrine\Persistence\Mapping\Driver;
 
 use AppendIterator;
+
+use function array_key_exists;
+use function array_map;
+use function assert;
+
 use CallbackFilterIterator;
 use Doctrine\Persistence\Mapping\MappingException;
 use FilesystemIterator;
+
+use function get_debug_type;
+use function get_declared_classes;
+
 use InvalidArgumentException;
+
+use function is_dir;
+
 use Iterator;
+
+use function preg_quote;
+use function realpath;
+
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use ReflectionClass;
 use RegexIterator;
 use SplFileInfo;
 
-use function array_key_exists;
-use function array_map;
-use function assert;
-use function get_debug_type;
-use function get_declared_classes;
-use function is_dir;
-use function preg_quote;
-use function realpath;
 use function sprintf;
 use function str_replace;
 use function str_starts_with;

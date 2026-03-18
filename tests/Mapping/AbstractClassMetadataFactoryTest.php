@@ -64,7 +64,7 @@ final class AbstractClassMetadataFactoryTest extends TestCase
     {
         $cmf = $this->createTestFactory();
         $this->expectException(MappingException::class);
-        $cmf->getMetadataFor((new class {
+        $cmf->getMetadataFor((new class () {
         })::class);
     }
 

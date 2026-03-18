@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace Doctrine\Persistence\Mapping\Driver;
 
-use Doctrine\Persistence\Mapping\MappingException;
-
 use function array_filter;
+
 use function array_merge;
 use function array_unique;
 use function array_values;
+
+use Doctrine\Persistence\Mapping\MappingException;
 
 /**
  * The ColocatedMappingDriver reads the mapping metadata located near the code.
