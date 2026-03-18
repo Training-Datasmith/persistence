@@ -38,7 +38,7 @@ final class FileClassLocator implements ClassLocator
 {
     /** @param iterable<SplFileInfo> $files An iterable of files to include. */
     public function __construct(
-        private iterable $files,
+        private readonly iterable $files,
     ) {
     }
 
@@ -67,8 +67,10 @@ final class FileClassLocator implements ClassLocator
         $classes = [];
         foreach (get_declared_classes() as $className) {
             $fileName = (new ReflectionClass($className))->getFileName();
-
-            if ($fileName === false || ! array_key_exists($fileName, $includedFiles)) {
+            if ($fileName === false) {
+                continue;
+            }
+            if (! array_key_exists($fileName, $includedFiles)) {
                 continue;
             }
 

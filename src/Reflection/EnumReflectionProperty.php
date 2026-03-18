@@ -65,10 +65,10 @@ class EnumReflectionProperty extends ReflectionProperty
      *
      * @return ($enum is BackedEnum ? (string|int) : (string[]|int[]))
      */
-    private function fromEnum(BackedEnum|array $enum)
+    private function fromEnum(BackedEnum|array $enum): array|int|string
     {
         if (is_array($enum)) {
-            return array_map(static fn (BackedEnum $enum) => $enum->value, $enum);
+            return array_map(static fn (BackedEnum $enum): int|string => $enum->value, $enum);
         }
 
         return $enum->value;

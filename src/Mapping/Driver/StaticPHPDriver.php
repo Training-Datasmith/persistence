@@ -101,8 +101,10 @@ class StaticPHPDriver implements MappingDriver
             $rc = new ReflectionClass($className);
 
             $sourceFile = $rc->getFileName();
-
-            if (! in_array($sourceFile, $includedFiles, true) || $this->isTransient($className)) {
+            if (! in_array($sourceFile, $includedFiles, true)) {
+                continue;
+            }
+            if ($this->isTransient($className)) {
                 continue;
             }
 

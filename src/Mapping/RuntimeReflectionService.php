@@ -64,13 +64,11 @@ class RuntimeReflectionService implements ReflectionService
 
     public function getAccessibleProperty(string $class, string $property): RuntimeReflectionProperty
     {
-        $reflectionProperty = new RuntimeReflectionProperty($class, $property);
-
         if (! array_key_exists($property, $this->getClass($class)->getDefaultProperties())) {
-            $reflectionProperty = new TypedNoDefaultReflectionProperty($class, $property);
+            return new TypedNoDefaultReflectionProperty($class, $property);
         }
 
-        return $reflectionProperty;
+        return new RuntimeReflectionProperty($class, $property);
     }
 
     public function hasPublicMethod(string $class, string $method): bool
