@@ -129,6 +129,13 @@ abstract class AbstractManagerRegistry implements ManagerRegistry
 
     public function getManagerForClass(string $class): ObjectManager|null
     {
+        // Guard against triggering the autoloader for non-existent classes, which can
+        // produce unexpected filesystem I/O, expose directory layout via error messages,
+        // or cause a ReflectionException to propagate uncaught.
+        if (!class_exists($class, false) && !interface_exists($class, false)) {
+            return null;
+        }
+
         $proxyClass = new ReflectionClass($class);
         if ($proxyClass->isAnonymous()) {
             return null;
