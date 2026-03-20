@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\Persistence\Mapping;
 
 use Doctrine\Persistence\Proxy;
-
-interface ProxyClassNameResolver
+interface Proxy_Class_Name_Resolver
 {
     /**
      * @phpstan-param class-string<Proxy<T>>|class-string<T> $className
@@ -15,5 +13,5 @@ interface ProxyClassNameResolver
      *
      * @template T of object
      */
-    public function resolveClassName(string $className): string;
+    public function resolve_class_name(string $class_name): string;
 }

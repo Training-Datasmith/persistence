@@ -1,56 +1,44 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\Persistence\Mapping;
 
 use function array_key_exists;
 use function assert;
 use function class_exists;
 use function class_parents;
-
-use Doctrine\Persistence\Reflection\RuntimeReflectionProperty;
-
-use Doctrine\Persistence\Reflection\TypedNoDefaultReflectionProperty;
+use Doctrine\Persistence\Reflection\Runtime_Reflection_Property;
+use Doctrine\Persistence\Reflection\Typed_No_Default_Reflection_Property;
 use ReflectionClass;
-use ReflectionException;
+use Reflection_Exception;
 use ReflectionMethod;
-
 /**
  * PHP Runtime Reflection Service.
  */
-class RuntimeReflectionService implements ReflectionService
+class Runtime_Reflection_Service implements Reflection_Service
 {
     /**
      * {@inheritDoc}
      */
-    public function getParentClasses(string $class): array
+    public function get_parent_classes(string $class): array
     {
-        if (! class_exists($class)) {
-            throw MappingException::nonExistingClass($class);
+        if (!class_exists($class)) {
+            throw Mapping_Exception::non_existing_class($class);
         }
-
         $parents = class_parents($class);
-
         assert($parents !== false);
-
         return $parents;
     }
-
-    public function getClassShortName(string $class): string
+    public function get_class_short_name(string $class): string
     {
-        $reflectionClass = new ReflectionClass($class);
-
-        return $reflectionClass->getShortName();
+        $reflection_class = new ReflectionClass($class);
+        return $reflection_class->get_short_name();
     }
-
-    public function getClassNamespace(string $class): string
+    public function get_class_namespace(string $class): string
     {
-        $reflectionClass = new ReflectionClass($class);
-
-        return $reflectionClass->getNamespaceName();
+        $reflection_class = new ReflectionClass($class);
+        return $reflection_class->get_namespace_name();
     }
-
     /**
      * @phpstan-param class-string<T> $class
      *
@@ -58,28 +46,24 @@ class RuntimeReflectionService implements ReflectionService
      *
      * @template T of object
      */
-    public function getClass(string $class): ReflectionClass
+    public function get_class(string $class): ReflectionClass
     {
         return new ReflectionClass($class);
     }
-
-    public function getAccessibleProperty(string $class, string $property): RuntimeReflectionProperty
+    public function get_accessible_property(string $class, string $property): Runtime_Reflection_Property
     {
-        if (! array_key_exists($property, $this->getClass($class)->getDefaultProperties())) {
-            return new TypedNoDefaultReflectionProperty($class, $property);
+        if (!array_key_exists($property, $this->get_class($class)->get_default_properties())) {
+            return new Typed_No_Default_Reflection_Property($class, $property);
         }
-
-        return new RuntimeReflectionProperty($class, $property);
+        return new Runtime_Reflection_Property($class, $property);
     }
-
-    public function hasPublicMethod(string $class, string $method): bool
+    public function has_public_method(string $class, string $method): bool
     {
         try {
-            $reflectionMethod = new ReflectionMethod($class, $method);
-        } catch (ReflectionException) {
+            $reflection_method = new ReflectionMethod($class, $method);
+        } catch (Reflection_Exception) {
             return false;
         }
-
-        return $reflectionMethod->isPublic();
+        return $reflection_method->is_public();
     }
 }

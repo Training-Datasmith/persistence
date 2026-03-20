@@ -1,23 +1,20 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\Persistence\Mapping\Driver;
 
 /**
  * Basic implementation of ClassLocator that passes a list of class names.
  */
-final class ClassNames implements ClassLocator
+final class Class_Names implements Class_Locator
 {
     /** @param list<class-string> $classNames */
-    public function __construct(
-        private readonly array $classNames,
-    ) {
-    }
-
-    /** @return list<class-string> */
-    public function getClassNames(): array
+    public function __construct(private readonly array $class_names)
     {
-        return $this->classNames;
+    }
+    /** @return list<class-string> */
+    public function get_class_names(): array
+    {
+        return $this->class_names;
     }
 }

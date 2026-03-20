@@ -1,15 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\Persistence\Mapping\Driver;
 
-use Doctrine\Persistence\Mapping\ClassMetadata;
-
+use Doctrine\Persistence\Mapping\Class_Metadata;
 /**
  * Contract for metadata drivers.
  */
-interface MappingDriver
+interface Mapping_Driver
 {
     /**
      * Loads the metadata for the specified class into the provided container.
@@ -19,21 +17,19 @@ interface MappingDriver
      *
      * @template T of object
      */
-    public function loadMetadataForClass(string $className, ClassMetadata $metadata): void;
-
+    public function load_metadata_for_class(string $class_name, Class_Metadata $metadata): void;
     /**
      * Gets the names of all mapped classes known to this driver.
      *
      * @return array<int, string> The names of all mapped classes known to this driver.
      * @phpstan-return list<class-string>
      */
-    public function getAllClassNames(): array;
-
+    public function get_all_class_names(): array;
     /**
      * Returns whether the class with the specified name should have its metadata loaded.
      * This is only the case if it is either mapped as an Entity or a MappedSuperclass.
      *
      * @phpstan-param class-string $className
      */
-    public function isTransient(string $className): bool;
+    public function is_transient(string $class_name): bool;
 }

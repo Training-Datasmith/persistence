@@ -1,37 +1,25 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\Persistence;
 
 use function assert;
-
 use InvalidArgumentException;
-
 use ReflectionClass;
-
 use function sprintf;
-
 /**
  * Abstract implementation of the ManagerRegistry contract.
  */
-abstract class AbstractManagerRegistry implements ManagerRegistry
+abstract class Abstract_Manager_Registry implements Manager_Registry
 {
     /**
      * @param array<string, string> $connections
      * @param array<string, string> $managers
      * @phpstan-param class-string $proxyInterfaceName
      */
-    public function __construct(
-        private readonly string $name,
-        private array $connections,
-        private array $managers,
-        private readonly string $defaultConnection,
-        private readonly string $defaultManager,
-        private readonly string $proxyInterfaceName,
-    ) {
+    public function __construct(private readonly string $name, private array $connections, private array $managers, private readonly string $default_connection, private readonly string $default_manager, private readonly string $proxy_interface_name)
+    {
     }
-
     /**
      * Fetches/creates the given services.
      *
@@ -41,8 +29,7 @@ abstract class AbstractManagerRegistry implements ManagerRegistry
      *
      * @return object The instance of the given service.
      */
-    abstract protected function getService(string $name): object;
-
+    abstract protected function get_service(string $name): object;
     /**
      * Resets the given services.
      *
@@ -50,84 +37,66 @@ abstract class AbstractManagerRegistry implements ManagerRegistry
      *
      * @param string $name The name of the service.
      */
-    abstract protected function resetService(string $name): void;
-
+    abstract protected function reset_service(string $name): void;
     /** Gets the name of the registry. */
-    public function getName(): string
+    public function get_name(): string
     {
         return $this->name;
     }
-
-    public function getConnection(string|null $name = null): object
+    public function get_connection(string|null $name = null): object
     {
         if ($name === null) {
-            $name = $this->defaultConnection;
+            $name = $this->default_connection;
         }
-
-        if (! isset($this->connections[$name])) {
-            throw new InvalidArgumentException(
-                sprintf('Doctrine %s Connection named "%s" does not exist.', $this->name, $name),
-            );
+        if (!isset($this->connections[$name])) {
+            throw new InvalidArgumentException(sprintf('Doctrine %s Connection named "%s" does not exist.', $this->name, $name));
         }
-
-        return $this->getService($this->connections[$name]);
+        return $this->get_service($this->connections[$name]);
     }
-
     /**
      * {@inheritDoc}
      */
-    public function getConnectionNames(): array
+    public function get_connection_names(): array
     {
         return $this->connections;
     }
-
     /**
      * {@inheritDoc}
      */
-    public function getConnections(): array
+    public function get_connections(): array
     {
         $connections = [];
         foreach ($this->connections as $name => $id) {
-            $connections[$name] = $this->getService($id);
+            $connections[$name] = $this->get_service($id);
         }
-
         return $connections;
     }
-
-    public function getDefaultConnectionName(): string
+    public function get_default_connection_name(): string
     {
-        return $this->defaultConnection;
+        return $this->default_connection;
     }
-
-    public function getDefaultManagerName(): string
+    public function get_default_manager_name(): string
     {
-        return $this->defaultManager;
+        return $this->default_manager;
     }
-
     /**
      * {@inheritDoc}
      *
      * @throws InvalidArgumentException
      */
-    public function getManager(string|null $name = null): ObjectManager
+    public function get_manager(string|null $name = null): Object_Manager
     {
         if ($name === null) {
-            $name = $this->defaultManager;
+            $name = $this->default_manager;
         }
-
-        if (! isset($this->managers[$name])) {
-            throw new InvalidArgumentException(
-                sprintf('Doctrine %s Manager named "%s" does not exist.', $this->name, $name),
-            );
+        if (!isset($this->managers[$name])) {
+            throw new InvalidArgumentException(sprintf('Doctrine %s Manager named "%s" does not exist.', $this->name, $name));
         }
-
-        $service = $this->getService($this->managers[$name]);
-        assert($service instanceof ObjectManager);
-
+        $service = $this->get_service($this->managers[$name]);
+        assert($service instanceof Object_Manager);
         return $service;
     }
-
-    public function getManagerForClass(string $class): ObjectManager|null
+    public function get_manager_for_class(string $class): Object_Manager|null
     {
         // Guard against triggering the autoloader for non-existent classes, which can
         // produce unexpected filesystem I/O, expose directory layout via error messages,
@@ -135,93 +104,69 @@ abstract class AbstractManagerRegistry implements ManagerRegistry
         if (!class_exists($class, false) && !interface_exists($class, false)) {
             return null;
         }
-
-        $proxyClass = new ReflectionClass($class);
-        if ($proxyClass->isAnonymous()) {
+        $proxy_class = new ReflectionClass($class);
+        if ($proxy_class->is_anonymous()) {
             return null;
         }
-
-        if ($proxyClass->implementsInterface($this->proxyInterfaceName)) {
-            $parentClass = $proxyClass->getParentClass();
-
-            if ($parentClass === false) {
+        if ($proxy_class->implements_interface($this->proxy_interface_name)) {
+            $parent_class = $proxy_class->get_parent_class();
+            if ($parent_class === false) {
                 return null;
             }
-
-            $class = $parentClass->getName();
+            $class = $parent_class->get_name();
         }
-
         foreach ($this->managers as $id) {
-            $manager = $this->getService($id);
-            assert($manager instanceof ObjectManager);
-
-            if (! $manager->getMetadataFactory()->isTransient($class)) {
+            $manager = $this->get_service($id);
+            assert($manager instanceof Object_Manager);
+            if (!$manager->get_metadata_factory()->is_transient($class)) {
                 return $manager;
             }
         }
-
         return null;
     }
-
     /**
      * {@inheritDoc}
      */
-    public function getManagerNames(): array
+    public function get_manager_names(): array
     {
         return $this->managers;
     }
-
     /**
      * {@inheritDoc}
      */
-    public function getManagers(): array
+    public function get_managers(): array
     {
         $managers = [];
-
         foreach ($this->managers as $name => $id) {
-            $manager = $this->getService($id);
-            assert($manager instanceof ObjectManager);
+            $manager = $this->get_service($id);
+            assert($manager instanceof Object_Manager);
             $managers[$name] = $manager;
         }
-
         return $managers;
     }
-
-    public function getRepository(
-        string $persistentObject,
-        string|null $persistentManagerName = null,
-    ): ObjectRepository {
-        return $this
-            ->selectManager($persistentObject, $persistentManagerName)
-            ->getRepository($persistentObject);
+    public function get_repository(string $persistent_object, string|null $persistent_manager_name = null): Object_Repository
+    {
+        return $this->select_manager($persistent_object, $persistent_manager_name)->get_repository($persistent_object);
     }
-
-    public function resetManager(string|null $name = null): ObjectManager
+    public function reset_manager(string|null $name = null): Object_Manager
     {
         if ($name === null) {
-            $name = $this->defaultManager;
+            $name = $this->default_manager;
         }
-
-        if (! isset($this->managers[$name])) {
+        if (!isset($this->managers[$name])) {
             throw new InvalidArgumentException(sprintf('Doctrine %s Manager named "%s" does not exist.', $this->name, $name));
         }
-
         // force the creation of a new document manager
         // if the current one is closed
-        $this->resetService($this->managers[$name]);
-
-        return $this->getManager($name);
+        $this->reset_service($this->managers[$name]);
+        return $this->get_manager($name);
     }
-
     /** @phpstan-param class-string $persistentObject */
-    private function selectManager(
-        string $persistentObject,
-        string|null $persistentManagerName = null,
-    ): ObjectManager {
-        if ($persistentManagerName !== null) {
-            return $this->getManager($persistentManagerName);
+    private function select_manager(string $persistent_object, string|null $persistent_manager_name = null): Object_Manager
+    {
+        if ($persistent_manager_name !== null) {
+            return $this->get_manager($persistent_manager_name);
         }
-
-        return $this->getManagerForClass($persistentObject) ?? $this->getManager();
+        return $this->get_manager_for_class($persistent_object) ?? $this->get_manager();
     }
 }

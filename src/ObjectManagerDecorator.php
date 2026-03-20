@@ -1,86 +1,71 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\Persistence;
 
-use Doctrine\Persistence\Mapping\ClassMetadata;
-use Doctrine\Persistence\Mapping\ClassMetadataFactory;
-
+use Doctrine\Persistence\Mapping\Class_Metadata;
+use Doctrine\Persistence\Mapping\Class_Metadata_Factory;
 /**
  * Base class to simplify ObjectManager decorators
  *
  * @template-covariant TObjectManager of ObjectManager
  */
-abstract class ObjectManagerDecorator implements ObjectManager
+abstract class Object_Manager_Decorator implements Object_Manager
 {
     /** @var TObjectManager */
-    protected ObjectManager $wrapped;
-
+    protected Object_Manager $wrapped;
     /**
      * {@inheritDoc}
      */
-    public function find(string $className, $id): object|null
+    public function find(string $class_name, $id): object|null
     {
-        return $this->wrapped->find($className, $id);
+        return $this->wrapped->find($class_name, $id);
     }
-
     public function persist(object $object): void
     {
         $this->wrapped->persist($object);
     }
-
     public function remove(object $object): void
     {
         $this->wrapped->remove($object);
     }
-
     public function clear(): void
     {
         $this->wrapped->clear();
     }
-
     public function detach(object $object): void
     {
         $this->wrapped->detach($object);
     }
-
     public function refresh(object $object): void
     {
         $this->wrapped->refresh($object);
     }
-
     public function flush(): void
     {
         $this->wrapped->flush();
     }
-
-    public function getRepository(string $className): ObjectRepository
+    public function get_repository(string $class_name): Object_Repository
     {
-        return $this->wrapped->getRepository($className);
+        return $this->wrapped->get_repository($class_name);
     }
-
-    public function getClassMetadata(string $className): ClassMetadata
+    public function get_class_metadata(string $class_name): Class_Metadata
     {
-        return $this->wrapped->getClassMetadata($className);
+        return $this->wrapped->get_class_metadata($class_name);
     }
-
     /** @phpstan-return ClassMetadataFactory<ClassMetadata<object>> */
-    public function getMetadataFactory(): ClassMetadataFactory
+    public function get_metadata_factory(): Class_Metadata_Factory
     {
-        return $this->wrapped->getMetadataFactory();
+        return $this->wrapped->get_metadata_factory();
     }
-
-    public function initializeObject(object $obj): void
+    public function initialize_object(object $obj): void
     {
-        $this->wrapped->initializeObject($obj);
+        $this->wrapped->initialize_object($obj);
     }
-
-    public function isUninitializedObject(mixed $value): bool
+    public function is_uninitialized_object(mixed $value): bool
     {
-        return $this->wrapped->isUninitializedObject($value);
+        return $this->wrapped->is_uninitialized_object($value);
     }
-
     public function contains(object $object): bool
     {
         return $this->wrapped->contains($object);

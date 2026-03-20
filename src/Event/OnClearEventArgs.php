@@ -1,34 +1,31 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\Persistence\Event;
 
-use Doctrine\Common\EventArgs;
-use Doctrine\Persistence\ObjectManager;
-
+use Doctrine\Common\Event_Args;
+use Doctrine\Persistence\Object_Manager;
 /**
  * Provides event arguments for the onClear event.
  *
  * @template-covariant TObjectManager of ObjectManager
  */
-class OnClearEventArgs extends EventArgs
+class On_Clear_Event_Args extends Event_Args
 {
     /**
      * @param ObjectManager $objectManager The object manager.
      * @phpstan-param TObjectManager $objectManager
      */
-    public function __construct(private readonly ObjectManager $objectManager)
+    public function __construct(private readonly Object_Manager $object_manager)
     {
     }
-
     /**
      * Retrieves the associated ObjectManager.
      *
      * @phpstan-return TObjectManager
      */
-    public function getObjectManager(): ObjectManager
+    public function get_object_manager(): Object_Manager
     {
-        return $this->objectManager;
+        return $this->object_manager;
     }
 }

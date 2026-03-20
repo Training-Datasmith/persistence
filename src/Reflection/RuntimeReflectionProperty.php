@@ -1,65 +1,50 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\Persistence\Reflection;
 
 use Doctrine\Persistence\Proxy;
-
 use function ltrim;
-
 use function method_exists;
-
 use ReflectionProperty;
-
 /**
  * PHP Runtime Reflection Property.
  *
  * Avoids triggering lazy loading if the provided object
  * is a {@see \Doctrine\Persistence\Proxy}.
  */
-class RuntimeReflectionProperty extends ReflectionProperty
+class Runtime_Reflection_Property extends ReflectionProperty
 {
     private readonly string $key;
-
     /** @param class-string $class */
     public function __construct(string $class, string $name)
     {
         parent::__construct($class, $name);
-
-        $this->key = $this->isPrivate() ? "\0" . ltrim($class, '\\') . "\0" . $name : ($this->isProtected() ? "\0*\0" . $name : $name);
+        $this->key = $this->is_private() ? "\x00" . ltrim($class, '\\') . "\x00" . $name : ($this->is_protected() ? "\x00*\x00" . $name : $name);
     }
-
-    public function getValue(object|null $object = null): mixed
+    public function get_value(object|null $object = null): mixed
     {
         if ($object === null) {
-            return parent::getValue($object);
+            return parent::get_value($object);
         }
-
         return ((array) $object)[$this->key] ?? null;
     }
-
     /**
      * {@inheritDoc}
      *
      * @param object|null $object
      */
-    public function setValue(mixed $object, mixed $value = null): void
+    public function set_value(mixed $object, mixed $value = null): void
     {
-        if (! ($object instanceof Proxy && ! $object->__isInitialized())) {
-            parent::setValue($object, $value);
-
+        if (!($object instanceof Proxy && !$object->__is_initialized())) {
+            parent::set_value($object, $value);
             return;
         }
-
-        if (! method_exists($object, '__setInitialized')) {
+        if (!method_exists($object, '__setInitialized')) {
             return;
         }
-
-        $object->__setInitialized(true);
-
-        parent::setValue($object, $value);
-
-        $object->__setInitialized(false);
+        $object->__set_initialized(true);
+        parent::set_value($object, $value);
+        $object->__set_initialized(false);
     }
 }

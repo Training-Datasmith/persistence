@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\Persistence;
 
 /**
@@ -11,8 +10,8 @@ namespace Doctrine\Persistence;
  * other listeners when properties change, instead of relying on the object manager to compute
  * property changes itself when changes are to be persisted.
  */
-interface NotifyPropertyChanged
+interface Notify_Property_Changed
 {
     /** Adds a listener that wants to be notified about property changes. */
-    public function addPropertyChangedListener(PropertyChangedListener $listener): void;
+    public function add_property_changed_listener(Property_Changed_Listener $listener): void;
 }

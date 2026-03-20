@@ -1,35 +1,31 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\Persistence;
 
 /**
  * Contract covering object managers for a Doctrine persistence layer ManagerRegistry class to implement.
  */
-interface ManagerRegistry extends ConnectionRegistry
+interface Manager_Registry extends Connection_Registry
 {
     /**
      * Gets the default object manager name.
      *
      * @return string The default object manager name.
      */
-    public function getDefaultManagerName(): string;
-
+    public function get_default_manager_name(): string;
     /**
      * Gets a named object manager.
      *
      * @param string|null $name The object manager name (null for the default one).
      */
-    public function getManager(string|null $name = null): ObjectManager;
-
+    public function get_manager(string|null $name = null): Object_Manager;
     /**
      * Gets an array of all registered object managers.
      *
      * @return array<string, ObjectManager> An array of ObjectManager instances
      */
-    public function getManagers(): array;
-
+    public function get_managers(): array;
     /**
      * Resets a named object manager.
      *
@@ -45,8 +41,7 @@ interface ManagerRegistry extends ConnectionRegistry
      *
      * @param string|null $name The object manager name (null for the default one).
      */
-    public function resetManager(string|null $name = null): ObjectManager;
-
+    public function reset_manager(string|null $name = null): Object_Manager;
     /**
      * Gets all object manager names and associated service IDs. A service ID
      * is a string that allows to obtain an object manager, typically from a
@@ -55,8 +50,7 @@ interface ManagerRegistry extends ConnectionRegistry
      * @return array<string,string> An array with object manager names as keys,
      *                              and service IDs as values.
      */
-    public function getManagerNames(): array;
-
+    public function get_manager_names(): array;
     /**
      * Gets the ObjectRepository for a persistent object.
      *
@@ -68,15 +62,11 @@ interface ManagerRegistry extends ConnectionRegistry
      *
      * @template T of object
      */
-    public function getRepository(
-        string $persistentObject,
-        string|null $persistentManagerName = null,
-    ): ObjectRepository;
-
+    public function get_repository(string $persistent_object, string|null $persistent_manager_name = null): Object_Repository;
     /**
      * Gets the object manager associated with a given class.
      *
      * @param class-string $class A persistent object class name.
      */
-    public function getManagerForClass(string $class): ObjectManager|null;
+    public function get_manager_for_class(string $class): Object_Manager|null;
 }

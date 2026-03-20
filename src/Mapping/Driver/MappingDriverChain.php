@@ -1,123 +1,98 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\Persistence\Mapping\Driver;
 
 use function array_keys;
-
-use Doctrine\Persistence\Mapping\ClassMetadata;
-
-use Doctrine\Persistence\Mapping\MappingException;
-
+use Doctrine\Persistence\Mapping\Class_Metadata;
+use Doctrine\Persistence\Mapping\Mapping_Exception;
 use function spl_object_id;
-
 /**
  * The DriverChain allows you to add multiple other mapping drivers for
  * certain namespaces.
  */
-class MappingDriverChain implements MappingDriver
+class Mapping_Driver_Chain implements Mapping_Driver
 {
     /**
      * The default driver.
      */
-    private MappingDriver|null $defaultDriver = null;
-
+    private Mapping_Driver|null $default_driver = null;
     /** @var array<string, MappingDriver> */
     private array $drivers = [];
-
     /** Gets the default driver. */
-    public function getDefaultDriver(): MappingDriver|null
+    public function get_default_driver(): Mapping_Driver|null
     {
-        return $this->defaultDriver;
+        return $this->default_driver;
     }
-
     /** Set the default driver. */
-    public function setDefaultDriver(MappingDriver $driver): void
+    public function set_default_driver(Mapping_Driver $driver): void
     {
-        $this->defaultDriver = $driver;
+        $this->default_driver = $driver;
     }
-
     /** Adds a nested driver. */
-    public function addDriver(MappingDriver $nestedDriver, string $namespace): void
+    public function add_driver(Mapping_Driver $nested_driver, string $namespace): void
     {
-        $this->drivers[$namespace] = $nestedDriver;
+        $this->drivers[$namespace] = $nested_driver;
     }
-
     /**
      * Gets the array of nested drivers.
      *
      * @return array<string, MappingDriver> $drivers
      */
-    public function getDrivers(): array
+    public function get_drivers(): array
     {
         return $this->drivers;
     }
-
-    public function loadMetadataForClass(string $className, ClassMetadata $metadata): void
+    public function load_metadata_for_class(string $class_name, Class_Metadata $metadata): void
     {
         foreach ($this->drivers as $namespace => $driver) {
-            if (str_starts_with($className, $namespace)) {
-                $driver->loadMetadataForClass($className, $metadata);
-
+            if (str_starts_with($class_name, $namespace)) {
+                $driver->load_metadata_for_class($class_name, $metadata);
                 return;
             }
         }
-
-        if ($this->defaultDriver !== null) {
-            $this->defaultDriver->loadMetadataForClass($className, $metadata);
-
+        if ($this->default_driver !== null) {
+            $this->default_driver->load_metadata_for_class($class_name, $metadata);
             return;
         }
-
-        throw MappingException::classNotFoundInNamespaces($className, array_keys($this->drivers));
+        throw Mapping_Exception::class_not_found_in_namespaces($class_name, array_keys($this->drivers));
     }
-
     /**
      * {@inheritDoc}
      */
-    public function getAllClassNames(): array
+    public function get_all_class_names(): array
     {
-        $classNames    = [];
-        $driverClasses = [];
-
+        $class_names = [];
+        $driver_classes = [];
         foreach ($this->drivers as $namespace => $driver) {
             $oid = spl_object_id($driver);
-
-            if (! isset($driverClasses[$oid])) {
-                $driverClasses[$oid] = $driver->getAllClassNames();
+            if (!isset($driver_classes[$oid])) {
+                $driver_classes[$oid] = $driver->get_all_class_names();
             }
-
-            foreach ($driverClasses[$oid] as $className) {
-                if (!str_starts_with($className, $namespace)) {
+            foreach ($driver_classes[$oid] as $class_name) {
+                if (!str_starts_with($class_name, $namespace)) {
                     continue;
                 }
-
-                $classNames[$className] = true;
+                $class_names[$class_name] = true;
             }
         }
-
-        if ($this->defaultDriver !== null) {
-            foreach ($this->defaultDriver->getAllClassNames() as $className) {
-                $classNames[$className] = true;
+        if ($this->default_driver !== null) {
+            foreach ($this->default_driver->get_all_class_names() as $class_name) {
+                $class_names[$class_name] = true;
             }
         }
-
-        return array_keys($classNames);
+        return array_keys($class_names);
     }
-
-    public function isTransient(string $className): bool
+    public function is_transient(string $class_name): bool
     {
         foreach ($this->drivers as $namespace => $driver) {
-            if (str_starts_with($className, $namespace)) {
-                return $driver->isTransient($className);
+            if (str_starts_with($class_name, $namespace)) {
+                return $driver->is_transient($class_name);
             }
         }
-
-        if ($this->defaultDriver !== null) {
-            return $this->defaultDriver->isTransient($className);
+        if ($this->default_driver !== null) {
+            return $this->default_driver->is_transient($class_name);
         }
-
         return true;
     }
 }

@@ -1,30 +1,23 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Doctrine\Persistence\Reflection;
 
 use function array_map;
-
-use BackedEnum;
-
+use Backed_Enum;
 use function is_array;
-
 use ReflectionProperty;
-
 use function reset;
-
 /**
  * PHP Enum Reflection Property - special override for backed enums.
  */
-class EnumReflectionProperty extends ReflectionProperty
+class Enum_Reflection_Property extends ReflectionProperty
 {
     /** @param class-string<BackedEnum> $enumType */
-    public function __construct(private readonly ReflectionProperty $originalReflectionProperty, private readonly string $enumType)
+    public function __construct(private readonly ReflectionProperty $original_reflection_property, private readonly string $enum_type)
     {
-        parent::__construct($originalReflectionProperty->class, $originalReflectionProperty->name);
+        parent::__construct($original_reflection_property->class, $original_reflection_property->name);
     }
-
     /**
      * {@inheritDoc}
      *
@@ -34,69 +27,58 @@ class EnumReflectionProperty extends ReflectionProperty
      *
      * @return int|string|int[]|string[]|null
      */
-    public function getValue($object = null): int|string|array|null
+    public function get_value($object = null): int|string|array|null
     {
         if ($object === null) {
             return null;
         }
-
-        $enum = $this->originalReflectionProperty->getValue($object);
-
+        $enum = $this->original_reflection_property->get_value($object);
         if ($enum === null) {
             return null;
         }
-
-        return $this->fromEnum($enum);
+        return $this->from_enum($enum);
     }
-
     /**
      * Converts enum value to enum instance.
      *
      * @param object|null $object
      */
-    public function setValue(mixed $object, mixed $value = null): void
+    public function set_value(mixed $object, mixed $value = null): void
     {
         if ($value !== null) {
-            $value = $this->toEnum($value);
+            $value = $this->to_enum($value);
         }
-
-        $this->originalReflectionProperty->setValue($object, $value);
+        $this->original_reflection_property->set_value($object, $value);
     }
-
     /**
      * @param BackedEnum|BackedEnum[] $enum
      *
      * @return ($enum is BackedEnum ? (string|int) : (string[]|int[]))
      */
-    private function fromEnum(BackedEnum|array $enum): array|int|string
+    private function from_enum(Backed_Enum|array $enum): array|int|string
     {
         if (is_array($enum)) {
-            return array_map(static fn (BackedEnum $enum): int|string => $enum->value, $enum);
+            return array_map(static fn(Backed_Enum $enum): int|string => $enum->value, $enum);
         }
-
         return $enum->value;
     }
-
     /**
      * @param int|string|int[]|string[]|BackedEnum|BackedEnum[] $value
      *
      * @return ($value is int|string|BackedEnum ? BackedEnum : BackedEnum[])
      */
-    private function toEnum(int|string|array|BackedEnum $value)
+    private function to_enum(int|string|array|Backed_Enum $value)
     {
-        if ($value instanceof BackedEnum) {
+        if ($value instanceof Backed_Enum) {
             return $value;
         }
-
         if (is_array($value)) {
             $v = reset($value);
-            if ($v instanceof BackedEnum) {
+            if ($v instanceof Backed_Enum) {
                 return $value;
             }
-
-            return array_map([$this->enumType, 'from'], $value);
+            return array_map([$this->enum_type, 'from'], $value);
         }
-
-        return $this->enumType::from($value);
+        return $this->enum_type::from($value);
     }
 }
